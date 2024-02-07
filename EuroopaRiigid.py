@@ -15,19 +15,26 @@ def failist_to_dict(f:str):
 riik_pealinn,pealinn_riik,riigid=failist_to_dict("riigid_pealinnad.txt")
 
 
-def lisa_voimalus(sona: dict, voti: str, vaar: str):
-    if voti not in sona:
-        sona[voti] = vaar
-        print(f"{voti} lisatud sõnastikku.")
-    else:
-        print(f"{voti} on juba sõnastikus.")
+def lisa_voimalus(riik_pealinn: dict, voti_riik: str, voti_pealinn: str):
 
-def paranda_viga(sona: dict, voti: str, uus_vaar: str):
-    if voti in sona:
-        sona[voti] = uus_vaar
-        print(f"{voti} on parandatud. Uus väärtus: {uus_vaar}.")
+    if voti_riik not in riik_pealinn:
+        riik_pealinn[voti_riik] = voti_pealinn
+        print(f"Riik {voti_riik} pealinnaga {voti_pealinn} lisatud sõnastikus.")
     else:
-        print(f"{voti} ei leitud sõnastikust.")
+        print(f"Error: riik {voti_riik} juba sõnastikus")
+
+
+def paranda_viga(riik_pealinn: dict):
+
+    riik = input("Sisestage selle riigi nimi, mille pealinna soovite muuta: ")
+    if riik in riik_pealinn:
+        vana_pealinn = riik_pealinn[riik]
+        uus_pealinn = input(f"Sisestatud riik {riik} ja tema pealinn on {vana_pealinn}. Sisestage uus pealinn: ")
+        riik_pealinn[riik] = uus_pealinn
+        print(f"Riigil {riik} nüüd selline pealinn: {uus_pealinn}.")
+    else:
+        print(f"Error: {riik} ei ole sõnastikus.")
+
 
 def kontrollimine(riik_pealinn: dict, pealinn_riik: dict, riigid: list):
     shuffle(riigid)
@@ -72,16 +79,26 @@ def riik_2_pealinn(riik_pealinn: dict, pealinn_riik: dict, riigid: list):
                 print("Sellist pealinna ei leitud.")
                 
         elif valik == "3":
-            uus_voti = input("Sisesta uus riik või pealinn: ")
-            uus_vaar = input("Sisesta sellele vastav pealinn või riik: ")
+            uus_voti = input("Sisesta uus riik: ")
+            uus_vaar = input("Sisesta uus pealinn: ")
             lisa_voimalus(riik_pealinn, uus_voti, uus_vaar)
             
+
         elif valik == "4":
-            vigane_sõna = input("Sisesta vigane riik või pealinn: ")
-            uus_vaar = input("Sisesta uus pealinn või riik: ")
-            paranda_viga(riik_pealinn, vigane_sõna, uus_vaar)
-            paranda_viga(pealinn_riik, vigane_sõna, uus_vaar)
-            
+            print("Valike mode:")
+            print("1. Paranda viga")
+            print("2. Välja")
+    
+            parandamise_reziim = input("Sisestage reziim (1 või 2): ")
+    
+            if parandamise_reziim == "1":
+                paranda_viga(riik_pealinn)
+            elif parandamise_reziim == "2":
+                pass
+            else:
+                print("Error: vale mode.")
+
+
         elif valik == "5":
             kontrollimine(riik_pealinn, pealinn_riik, riigid)
             
